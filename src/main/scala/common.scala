@@ -1,7 +1,7 @@
 package common
 
 import zio.{Has, ZIO, Layer}
-import com.github.dapperware.slack.AccessToken
+import com.github.dapperware.slack.Token
 import zio.config.ReadError
 import zio.config.typesafe.TypesafeConfig
 import zio.config.ConfigDescriptor
@@ -12,8 +12,8 @@ type Basic = Has[BasicConfig]
 val default: Layer[ReadError [String], Basic] =
     TypesafeConfig.fromDefaultLoader(nested("basic") { BasicConfig.descriptor })
 
-val accessToken: ZIO[Basic, Nothing, AccessToken.Token] =
-    ZIO.service[BasicConfig].map(c => AccessToken.Token(c.token))
+val accessToken: ZIO[Basic, Nothing, Token] =
+    ZIO.service[BasicConfig].map(c => Token(c.token))
 
 case class BasicConfig(token: String, channel: String)
 

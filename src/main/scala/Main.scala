@@ -15,11 +15,11 @@ object MainApp extends App:
 
   val slackClients: Layer[Throwable, SlackRealtimeClient & SlackClient] = 
     AsyncHttpClientZioBackend.layer() >>> (SlackRealtimeClient.live ++ SlackClient.live)
+
   val accessTokenAndBasicLayer: Layer[Throwable, AccessToken & Basic] = default >+> accessToken.toLayer
 
   val layer: Layer[Throwable, SlackEnv & SlackRealtimeEnv & Basic] =
     slackClients ++ accessTokenAndBasicLayer
-      
 
   override def run(args: List[String]): ZIO[ZEnv, Nothing, ExitCode] = 
     (for {
